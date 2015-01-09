@@ -1,0 +1,9 @@
+name: tetrad_block_stacker
+version: 0.0.1
+author: Andrew O'Neill <foolusion@gmail.com>
+description: Stack Tetrad Blocks
+homepage: https://github.com/foolusion
+environment:
+  sdk: '>=1.0.0 <2.0.0'
+dependencies:
+  browser: any
