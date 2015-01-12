@@ -10,6 +10,7 @@ class Game {
   Tetrad cur, next;
   int dropTime = 1000~/10;
   Input input;
+  bool gameOver = false;
   
   Game() {
     startTime = new DateTime.now().millisecondsSinceEpoch;
@@ -20,7 +21,7 @@ class Game {
     blocks = new List<int>.filled(wBoard*hBoard, 0);
     cur = Tetrad.makeRandomTetrad();
     next = Tetrad.makeRandomTetrad();
-    input = new Input();
+    input = new Input(this);
   }
   
   update(int time) {
@@ -33,6 +34,9 @@ class Game {
       moveTetradDown(this);
       startTime = time;
     }
+    if (gameOver) {
+      print('You Lose');
+    }
   }
   
   void swapToNextTetrad() {
@@ -42,14 +46,37 @@ class Game {
     yPosition = 0;
   }
   
-  void moveTetradDown(Game g) {
+  static void moveTetradDown(Game g) {
     final Tetrad t = g.cur;
-    if (yPosition + t.height == hBoard || intersects(t, xPosition, yPosition+1, blocks)) {
-      mergeBlocks();
-      swapToNextTetrad();
+    if (g.yPosition + t.height == g.hBoard || g.intersects(t, g.xPosition, g.yPosition+1, g.blocks)) {
+      g.mergeBlocks();
+      if (g.gameOver) {
+        return;
+      }
+      g.swapToNextTetrad();
       return;
     }
-    yPosition++;
+    g.yPosition++;
+  }
+  
+  static void moveTetradLeft(Game g) {
+    final Tetrad t = g.cur;
+    if (g.xPosition-1 < 0 || g.intersects(t, g.xPosition-1, g.yPosition, g.blocks)) {
+      return;
+    }
+    g.xPosition--;
+  }
+
+  static void moveTetradRight(Game g) {
+    final Tetrad t = g.cur;
+    if (g.xPosition+1+t.width >= g.wBoard || g.intersects(t, g.xPosition+1, g.yPosition, g.blocks)) {
+      return;
+    }
+    g.xPosition++;
+  }
+  
+  static void rotateTetrad(Game g) {
+    g.cur.rotate();
   }
   
   intersects(Tetrad t, int x, int y, List<int> blocks) {
@@ -77,6 +104,10 @@ class Game {
   }
   
   void mergeBlocks() {
+    if (yPosition <= 2) {
+      gameOver = true;
+      return;
+    }
     final Tetrad t = g.cur;
     for (int i = 0; i < t.config[t.currentConfig].length; i++) {
       if (t.config[t.currentConfig][i] == '0') {
