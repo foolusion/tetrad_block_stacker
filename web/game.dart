@@ -9,7 +9,7 @@ class Game {
   List<int> blocks; // static blocks on the bottom of the screen.
   Tetrad cur, next;
   int dropTime = 1000~/10;
-  Input input = new Input();
+  Input input;
   
   Game() {
     startTime = new DateTime.now().millisecondsSinceEpoch;
@@ -20,6 +20,7 @@ class Game {
     blocks = new List<int>.filled(wBoard*hBoard, 0);
     cur = Tetrad.makeRandomTetrad();
     next = Tetrad.makeRandomTetrad();
+    input = new Input();
   }
   
   update(int time) {

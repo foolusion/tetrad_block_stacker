@@ -1,14 +1,16 @@
 part of tetrad_block_stacker;
 
 class Input {
-  final List<String> keys = new List<String>(256);
-  final Map<String, bool> actions = {};
+  List<String> keys = new List<String>(256);
+  Map<String, bool> actions = new Map<String, bool>();
   
-  Inupt() {
+  Input() {
     keys[37] = 'left';
     keys[38] = 'rotate';
     keys[39] = 'right';
     keys[40] = 'down';
+    html.window.onKeyDown.listen(keydown);
+    html.window.onKeyUp.listen(keyup);
   }
   
   getAction() {
@@ -18,5 +20,14 @@ class Input {
     if (actions['down'] == true) return (Game g) => {};
     return (Game g) => {};
   }
+  
+  keydown(html.KeyboardEvent e) {
+    actions[keys[e.keyCode]] = true;
+    print(e.keyCode);
+  }
 
+  keyup(html.KeyboardEvent e) {
+    actions[keys[e.keyCode]] = false;
+    print(e.keyCode);
+  }
 }
