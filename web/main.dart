@@ -1,6 +1,5 @@
 library tetrad_block_stacker;
 
-import 'dart:async' as async;
 import 'dart:html' as html;
 import 'dart:math' as math;
 
