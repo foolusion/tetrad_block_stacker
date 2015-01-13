@@ -4,10 +4,10 @@ class Screen {
   html.CanvasElement canvas;
   html.CanvasRenderingContext2D context;
   
-  Screen(String s) {
+  Screen(String s, int width, int height) {
     canvas = html.querySelector(s);
-    canvas.width = 20*16;
-    canvas.height = 40*16;
+    canvas.width = (width+4)*blockSize;
+    canvas.height = height*blockSize;
     context = canvas.context2D;
   }
 }

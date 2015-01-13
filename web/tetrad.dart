@@ -23,16 +23,41 @@ const int wI = 4;
 const int hI = 1;
 
 class Tetrad {
-  final List<String> config;
+  List<String> config;
   int width, height;
   int currentConfig = 0;
-  final String color;
+  String color;
+  static math.Random r = new math.Random();
   
   Tetrad(this.config, this.width, this.height, this.color) {
   }
   
+  Tetrad.copy(Tetrad t) {
+    config = t.config;
+    width = t.width;
+    height = t.height;
+    currentConfig = t.currentConfig;
+    color = t.color;
+  }
+  
   static Tetrad makeRandomTetrad() {
-    return new Tetrad(l, wL, hL, 'blue');
+    switch (r.nextInt(7)) {
+      case 0:
+        return new Tetrad(l, wL, hL, 'red');
+      case 1:
+        return new Tetrad(j, wJ, hJ, 'orange');
+      case 2:
+        return new Tetrad(t, wT, hT, 'yellow');
+      case 3:
+        return new Tetrad(z, wZ, hZ, 'green');
+      case 4:
+        return new Tetrad(s, wS, hS, 'blue');
+      case 5:
+        return new Tetrad(o, wO, hO, 'indigo');
+      case 6:
+        return new Tetrad(i, wI, hI, 'violet');
+    }
+    return new Tetrad(l, wL, hL, 'red');
   }
   
   rotate() {
@@ -43,8 +68,6 @@ class Tetrad {
   }
   
   draw(ctx, x, y) {
-    ctx.save();
-    ctx.translate(blockSize*(x), blockSize*(y));
     ctx.fillStyle = color;
     ctx.strokeStyle = 'black';
     for (var i = 0; i < width; i++) {
@@ -55,8 +78,5 @@ class Tetrad {
         }
       }
     }
-    ctx.restore();
-    ctx.strokeStyle = 'yellow';
-    ctx.strokeRect(x*blockSize, y*blockSize, blockSize, blockSize);
   }
 }

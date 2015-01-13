@@ -11,23 +11,32 @@ part 'tetrad.dart';
 Screen scr;
 Game g;
 void main() {
-  scr = new Screen('#screen');
-  g = new Game();
+  g = new Game(16, 24);
+  scr = new Screen('#screen', 16, 24);
   gameLoop();
 }
 
 int start = new DateTime.now().millisecondsSinceEpoch;
 var tetrad = new Tetrad(i, wI, hI, 'red');
 
-var x = 0;
-var y = 0;
-
 gameLoop([_]) {
   int i = html.window.requestAnimationFrame(gameLoop);
   int time = new DateTime.now().millisecondsSinceEpoch;
   g.update(time);
   scr.context.clearRect(0, 0, scr.canvas.width, scr.canvas.height);
+  scr.context.save();
+  scr.context.translate(blockSize*(g.xPosition)+-.5, blockSize*(g.yPosition)+-.5);
   g.cur.draw(scr.context, g.xPosition, g.yPosition); 
+  scr.context.restore();
+  
+  scr.context.save();
+  scr.context.translate(blockSize*(g.wBoard)+-.5, -.5);
+  scr.context.strokeRect(0, 0, blockSize*4, blockSize*4);
+  scr.context.font = '12pt Roboto';
+  var t = scr.context.measureText('Next');
+  scr.context.fillText('Next', 0, blockSize*4+t.actualBoundingBoxAscent);
+  g.next.draw(scr.context, g.wBoard, 0);
+  scr.context.restore();
   g.draw(scr);
   if (g.gameOver) {
     html.window.cancelAnimationFrame(i);
