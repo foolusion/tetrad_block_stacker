@@ -20,7 +20,7 @@ class Game {
   int xPosition, yPosition; // position of the current falling block.
   List<int> blocks; // static blocks on the bottom of the screen.
   Tetrad cur, next;
-  int dropTime = 1000 ~/ 10;
+  int dropTime = 1000 ~/ 5;
   Input input;
   bool gameOver = false;
   final int loseLine = 3;
@@ -49,8 +49,34 @@ class Game {
     if (gameOver) {
       print('You Lose');
     }
+    checkForFullLines();
   }
 
+  void checkForFullLines() {
+    for (int i = 0; i < hBoard; i++) {
+      bool fullLine = true;
+      for (int j = 0; j < wBoard; j++) {
+        if (blocks[j+i*wBoard] == 0) {
+          fullLine = false;
+        }
+      }
+      if (fullLine) {
+        clearLine(i);
+      }
+    }
+  }
+  
+  void clearLine(int row) {
+    for (int i = (row+1)*wBoard-1; i > 0; i--) {
+      if (i-wBoard < 0) {
+        blocks[i] = 0;
+        continue;
+      } 
+      blocks[i] = blocks[i-wBoard];
+
+    }
+  }
+  
   void swapToNextTetrad() {
     cur = next;
     next = Tetrad.makeRandomTetrad();

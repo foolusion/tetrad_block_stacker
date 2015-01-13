@@ -24,6 +24,8 @@ gameLoop([_]) {
   int time = new DateTime.now().millisecondsSinceEpoch;
   g.update(time);
   scr.context.clearRect(0, 0, scr.canvas.width, scr.canvas.height);
+  scr.context.strokeStyle = 'black';
+  scr.context.strokeRect(0, 0, blockSize*g.wBoard, blockSize*g.hBoard);
   scr.context.save();
   scr.context.translate(blockSize*(g.xPosition)+-.5, blockSize*(g.yPosition)+-.5);
   g.cur.draw(scr.context, g.xPosition, g.yPosition); 

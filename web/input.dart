@@ -7,7 +7,7 @@ class Input {
   bool rotateReleased = true;
   int leftTime = horizontalSpeed;
   int rightTime = horizontalSpeed;
-  static const int horizontalSpeed = 150;
+  static const int horizontalSpeed = 500;
 
   Input(this.g) {
     keys[37] = 'left';
