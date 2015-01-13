@@ -25,7 +25,7 @@ gameLoop([_]) {
   g.update(time);
   scr.context.clearRect(0, 0, scr.canvas.width, scr.canvas.height);
   scr.context.strokeStyle = 'black';
-  scr.context.strokeRect(0, 0, blockSize*g.wBoard, blockSize*g.hBoard);
+  scr.context.strokeRect(.5, .5, blockSize*g.wBoard-1, blockSize*g.hBoard-1);
   scr.context.save();
   scr.context.translate(blockSize*(g.xPosition)+-.5, blockSize*(g.yPosition)+-.5);
   g.cur.draw(scr.context, g.xPosition, g.yPosition); 
@@ -36,7 +36,7 @@ gameLoop([_]) {
   scr.context.strokeRect(0, 0, blockSize*4, blockSize*4);
   scr.context.font = '12pt Roboto';
   var t = scr.context.measureText('Next');
-  scr.context.fillText('Next', 0, blockSize*4+t.actualBoundingBoxAscent);
+  scr.context.fillText('Next', 2, 2+blockSize*4+t.actualBoundingBoxAscent);
   g.next.draw(scr.context, g.wBoard, 0);
   scr.context.restore();
   g.draw(scr);
