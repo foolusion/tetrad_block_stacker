@@ -17,9 +17,6 @@ void main() {
   gameLoop();
 }
 
-int start = new DateTime.now().millisecondsSinceEpoch;
-var tetrad = new Tetrad(i, wI, hI, 'red', g);
-
 gameLoop([_]) {
   int i = html.window.requestAnimationFrame(gameLoop);
   int time = new DateTime.now().millisecondsSinceEpoch;
