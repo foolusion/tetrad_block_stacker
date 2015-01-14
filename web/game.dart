@@ -33,8 +33,8 @@ class Game {
     xPosition = wBoard ~/ 2;
     yPosition = 0;
     blocks = new List<int>.filled(wBoard * hBoard, 0);
-    cur = Tetrad.makeRandomTetrad(this);
     next = Tetrad.newTetradList(this);
+    cur = next.removeLast();
     input = new Input(this);
     scr = new Screen(screenQuery, wBoard, hBoard);
   }
