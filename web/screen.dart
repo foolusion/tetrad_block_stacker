@@ -10,7 +10,7 @@ class Screen {
     canvas.height = height * blockSize;
     context = canvas.context2D;
   }
-  
+
   drawBlock(String color, int x, int y) {
     context.save();
     context.translate(blockSize * (x) + -.5, blockSize * (y) + -.5);
@@ -20,7 +20,7 @@ class Screen {
     context.strokeRect(0, 0, blockSize, blockSize);
     context.restore();
   }
-  
+
   drawLoseLine(int height, int width) {
     context.save();
     context.translate(-.5, -.5);
@@ -31,19 +31,19 @@ class Screen {
     context.stroke();
     context.restore();
   }
-  
+
   drawBackground(int w, int h) {
     context.fillStyle = 'black';
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.strokeStyle = 'white';
-    context.strokeRect(.5, .5, blockSize*w-1, blockSize*h-1);
+    context.strokeRect(.5, .5, blockSize * w - 1, blockSize * h - 1);
     context.save();
-    context.translate(blockSize*(w)+-.5, -.5);
-    context.strokeRect(0, 0, blockSize*4, blockSize*4);
+    context.translate(blockSize * (w) + -.5, -.5);
+    context.strokeRect(0, 0, blockSize * 4, blockSize * 4);
     context.font = '12pt Roboto';
     var t = context.measureText('Next');
     context.fillStyle = 'white';
-    context.fillText('Next', 2, 2+blockSize*4+t.actualBoundingBoxAscent);
+    context.fillText('Next', 2, 2 + blockSize * 4 + t.actualBoundingBoxAscent);
     context.restore();
   }
 }

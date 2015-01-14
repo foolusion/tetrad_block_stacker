@@ -60,7 +60,7 @@ class Game {
     for (int i = 0; i < hBoard; i++) {
       bool fullLine = true;
       for (int j = 0; j < wBoard; j++) {
-        if (blocks[j+i*wBoard] == 0) {
+        if (blocks[j + i * wBoard] == 0) {
           fullLine = false;
         }
       }
@@ -71,17 +71,17 @@ class Game {
     }
     score += numLines * numLines * wBoard;
   }
-  
+
   void clearLine(int row) {
-    for (int i = (row+1)*wBoard-1; i > 0; i--) {
-      if (i-wBoard < 0) {
+    for (int i = (row + 1) * wBoard - 1; i > 0; i--) {
+      if (i - wBoard < 0) {
         blocks[i] = 0;
         continue;
-      } 
-      blocks[i] = blocks[i-wBoard];
+      }
+      blocks[i] = blocks[i - wBoard];
     }
   }
-  
+
   void swapToNextTetrad() {
     cur = next;
     next = Tetrad.makeRandomTetrad(this);
@@ -184,7 +184,7 @@ class Game {
       scr.context.fillStyle = intColors[blocks[i]];
       scr.drawBlock(intColors[blocks[i]], x, y);
     }
-    cur.draw(xPosition, yPosition); 
+    cur.draw(xPosition, yPosition);
     next.draw(wBoard, 0);
   }
 }

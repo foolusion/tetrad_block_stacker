@@ -73,7 +73,7 @@ class Tetrad {
     for (var i = 0; i < width; i++) {
       for (var j = 0; j < height; j++) {
         if (config[currentConfig][i + j * width] == '1') {
-          g.scr.drawBlock(color, x+i, y+j);
+          g.scr.drawBlock(color, x + i, y + j);
         }
       }
     }

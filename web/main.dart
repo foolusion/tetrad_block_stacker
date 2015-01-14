@@ -32,4 +32,3 @@ gameLoop([_]) {
   score.text = '${g.score}';
 }
 
-
