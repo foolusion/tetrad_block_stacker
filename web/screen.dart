@@ -40,10 +40,6 @@ class Screen {
     context.save();
     context.translate(blockSize * (w) + -.5, -.5);
     context.strokeRect(0, 0, blockSize * 4, blockSize * 4);
-    context.font = '12pt Roboto';
-    var t = context.measureText('Next');
-    context.fillStyle = 'white';
-    context.fillText('Next', 2, 2 + blockSize * 4 + t.actualBoundingBoxAscent);
     context.restore();
   }
 }
