@@ -7,3 +7,7 @@ environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:
   browser: any
+transformers:
+- $dart2js:
+    checked: true
+    minify: true
