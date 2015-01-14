@@ -41,6 +41,26 @@ class Tetrad {
     color = t.color;
     g = t.g;
   }
+  
+  static List<Tetrad> newTetradList(Game g) {
+    var tl = [];
+    tl.add(new Tetrad(l, wL, hL, 'red', g));
+    tl.add(new Tetrad(l, wL, hL, 'red', g));
+    tl.add(new Tetrad(j, wJ, hJ, 'orange', g));
+    tl.add(new Tetrad(j, wJ, hJ, 'orange', g));
+    tl.add(new Tetrad(t, wT, hT, 'yellow', g));
+    tl.add(new Tetrad(t, wT, hT, 'yellow', g));
+    tl.add(new Tetrad(z, wZ, hZ, 'green', g));
+    tl.add(new Tetrad(z, wZ, hZ, 'green', g));
+    tl.add(new Tetrad(s, wS, hS, 'blue', g));
+    tl.add(new Tetrad(s, wS, hS, 'blue', g));
+    tl.add(new Tetrad(o, wO, hO, 'indigo', g));
+    tl.add(new Tetrad(o, wO, hO, 'indigo', g));
+    tl.add(new Tetrad(i, wI, hI, 'violet', g));
+    tl.add(new Tetrad(i, wI, hI, 'violet', g));
+    tl.shuffle(r);
+    return tl;
+  }
 
   static Tetrad makeRandomTetrad(Game g) {
     switch (r.nextInt(7)) {
