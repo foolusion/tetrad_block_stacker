@@ -20,7 +20,8 @@ class Game {
   int wBoard, hBoard;
   int xPosition, yPosition; // position of the current falling block.
   List<int> blocks; // static blocks on the bottom of the screen.
-  Tetrad cur, next;
+  Tetrad cur;
+  List<Tetrad> next;
   int dropTime = 1000 ~/ 5;
   Input input;
   bool gameOver = false;
@@ -33,7 +34,7 @@ class Game {
     yPosition = 0;
     blocks = new List<int>.filled(wBoard * hBoard, 0);
     cur = Tetrad.makeRandomTetrad(this);
-    next = Tetrad.makeRandomTetrad(this);
+    next = Tetrad.newTetradList(this);
     input = new Input(this);
     scr = new Screen(screenQuery, wBoard, hBoard);
   }
@@ -83,10 +84,12 @@ class Game {
   }
 
   void swapToNextTetrad() {
-    cur = next;
-    next = Tetrad.makeRandomTetrad(this);
-    xPosition = wBoard ~/ 2;
-    yPosition = 0;
+      cur = next.removeLast();
+      xPosition = wBoard ~/ 2;
+      yPosition = 0;
+      if (next.length == 0) {
+        next = Tetrad.newTetradList(this);
+      }
   }
 
   static void moveTetradDown(Game g) {
@@ -185,6 +188,6 @@ class Game {
       scr.drawBlock(intColors[blocks[i]], x, y);
     }
     cur.draw(xPosition, yPosition);
-    next.draw(wBoard, 0);
+    next.last.draw(wBoard, 0);
   }
 }
