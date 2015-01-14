@@ -8,6 +8,8 @@ class Input {
   int leftTime = horizontalSpeed;
   int rightTime = horizontalSpeed;
   static const int horizontalSpeed = 500;
+  async.StreamSubscription keyDownSub;
+  async.StreamSubscription keyUpSub;
 
   Input(this.g) {
     keys[37] = 'left';
@@ -18,8 +20,13 @@ class Input {
     actions['right'] = false;
     actions['rotate'] = false;
     actions['down'] = false;
-    html.window.onKeyDown.listen(keydown);
-    html.window.onKeyUp.listen(keyup);
+    keyDownSub = html.window.onKeyDown.listen(keydown);
+    keyUpSub = html.window.onKeyUp.listen(keyup);
+  }
+  
+  shutdown() {
+    keyDownSub.cancel();
+    keyUpSub.cancel();
   }
 
   Function getAction(dt) {

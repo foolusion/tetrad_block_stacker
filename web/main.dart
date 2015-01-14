@@ -1,5 +1,6 @@
 library tetrad_block_stacker;
 
+import 'dart:async' as async;
 import 'dart:html' as html;
 import 'dart:math' as math;
 
@@ -11,21 +12,13 @@ part 'tetrad.dart';
 Game g;
 html.DivElement score;
 void main() {
-  g = new Game(16, 24, '#screen');
-  score = new html.DivElement();
-  html.querySelector('body').append(score);
-  gameLoop();
-}
-
-gameLoop([_]) {
-  int i = html.window.requestAnimationFrame(gameLoop);
-  int time = new DateTime.now().millisecondsSinceEpoch;
-  g.update(time);
-  g.draw();
-  if (g.gameOver) {
-    html.window.cancelAnimationFrame(i);
-    return;
-  }
-  score.text = '${g.score}';
+  var start = html.querySelector('#startScreen');
+  start.querySelector('a.start').onClick.first.then((e) {
+    start.className = 'hidden';
+    var game = html.querySelector('#game');
+    game.className = 'active';
+    g = new Game(16, 24, '#screen');
+    g.gameLoop();
+    });
 }
 

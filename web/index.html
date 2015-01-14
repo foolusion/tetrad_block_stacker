@@ -16,8 +16,14 @@
 </head>
 
 <body>
-
+<div id="startScreen" class="startScreen active">
+  <h1 class="title">Tetrad Block Stacker</h1>
+  <a class="start" href="#game">Start Game</a>
+  <a class="settings" href="#settings">Settings</a>
+</div>
+<div id="game" class="hidden">
   <canvas id="screen"></canvas>
+</div>
 
 <script type="application/dart" src="main.dart"></script>
 <script data-pub-inline src="packages/browser/dart.js"></script>

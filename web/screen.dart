@@ -10,6 +10,13 @@ class Screen {
     canvas.height = height * blockSize;
     context = canvas.context2D;
   }
+  
+  shutdown() {
+    var s = canvas.toDataUrl();
+    context.fillStyle = 'black';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    return s;
+  }
 
   drawBlock(String color, int x, int y) {
     context.save();
@@ -40,6 +47,9 @@ class Screen {
     context.save();
     context.translate(blockSize * (w) + -.5, -.5);
     context.strokeRect(0, 0, blockSize * 4, blockSize * 4);
+    context.fillStyle = 'white';
+    context.font = '12pt sans-serif';
+    context.fillText('Next', 0, blockSize*5);
     context.restore();
   }
 }

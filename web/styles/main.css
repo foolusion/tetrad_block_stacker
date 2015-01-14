@@ -1,13 +1,47 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto);
-
 html, body {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;
 }
 
 #screen {
+  display: block;
+}
+
+.startScreen > h1 {
+  justify-content: center;
+  display: flex;
+  flex: 0 0 100%;
+}
+
+.startScreen > a {
+  justify-content: center;
+  background: black;
+  display: flex;
+  flex: 0 0 25%;
+  padding: 1em;
+  color: white;
+}
+
+a:hover {
+  background: lightGray;
+  color: black;
+}
+
+.startScreen {
+  border: 1px solid black;
+  max-width: 400px;
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.active {
   display: block;
 }

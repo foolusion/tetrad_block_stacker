@@ -38,6 +38,13 @@ class Game {
     input = new Input(this);
     scr = new Screen(screenQuery, wBoard, hBoard);
   }
+  
+  shutdown() {
+    input.shutdown();
+    var screenShot = scr.shutdown();
+    html.ImageElement img = new html.ImageElement(src: screenShot);
+    html.querySelector('body').append(img);
+  }
 
   update(int time) {
     if (cur == null) {
@@ -54,6 +61,18 @@ class Game {
       print('You Lose');
     }
     checkForFullLines();
+  }
+  
+  gameLoop([_]) {
+    int i = html.window.requestAnimationFrame(gameLoop);
+    int time = new DateTime.now().millisecondsSinceEpoch;
+    g.update(time);
+    g.draw();
+    if (g.gameOver) {
+      html.window.cancelAnimationFrame(i);
+      g.shutdown();
+      return;
+    }
   }
 
   void checkForFullLines() {
