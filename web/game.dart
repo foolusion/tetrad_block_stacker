@@ -15,6 +15,7 @@ Map<String, int> colorInts = {
 };
 
 class Game {
+  int score = 0;
   int startTime;
   int wBoard, hBoard;
   int xPosition, yPosition; // position of the current falling block.
@@ -24,15 +25,17 @@ class Game {
   Input input;
   bool gameOver = false;
   final int loseLine = 3;
+  Screen scr;
 
-  Game(this.wBoard, this.hBoard) {
+  Game(this.wBoard, this.hBoard, String screenQuery) {
     startTime = new DateTime.now().millisecondsSinceEpoch;
     xPosition = wBoard ~/ 2;
     yPosition = 0;
     blocks = new List<int>.filled(wBoard * hBoard, 0);
-    cur = Tetrad.makeRandomTetrad();
-    next = Tetrad.makeRandomTetrad();
+    cur = Tetrad.makeRandomTetrad(this);
+    next = Tetrad.makeRandomTetrad(this);
     input = new Input(this);
+    scr = new Screen(screenQuery, wBoard, hBoard);
   }
 
   update(int time) {
@@ -53,6 +56,7 @@ class Game {
   }
 
   void checkForFullLines() {
+    var numLines = 0;
     for (int i = 0; i < hBoard; i++) {
       bool fullLine = true;
       for (int j = 0; j < wBoard; j++) {
@@ -61,9 +65,11 @@ class Game {
         }
       }
       if (fullLine) {
+        numLines++;
         clearLine(i);
       }
     }
+    score += numLines * numLines * wBoard;
   }
   
   void clearLine(int row) {
@@ -73,13 +79,12 @@ class Game {
         continue;
       } 
       blocks[i] = blocks[i-wBoard];
-
     }
   }
   
   void swapToNextTetrad() {
     cur = next;
-    next = Tetrad.makeRandomTetrad();
+    next = Tetrad.makeRandomTetrad(this);
     xPosition = wBoard ~/ 2;
     yPosition = 0;
   }
@@ -155,6 +160,7 @@ class Game {
       gameOver = true;
       return;
     }
+    score++;
     final Tetrad t = new Tetrad.copy(g.cur);
     for (int i = 0; i < t.config[t.currentConfig].length; i++) {
       if (t.config[t.currentConfig][i] == '0') {
@@ -166,24 +172,19 @@ class Game {
     }
   }
 
-  draw(Screen s) {
-    s.context.save();
-    s.context.translate(-.5, -.5);
-    s.context.strokeStyle = 'black';
-    s.context.beginPath();
-    s.context.moveTo(0, (loseLine + 1) * blockSize);
-    s.context.lineTo(wBoard * blockSize, (loseLine + 1) * blockSize);
-    s.context.stroke();
+  draw() {
+    scr.drawBackground(wBoard, hBoard);
+    scr.drawLoseLine(loseLine, wBoard);
     for (int i = 0; i < blocks.length; i++) {
       if (blocks[i] == 0) {
         continue;
       }
       int x = i % wBoard;
       int y = i ~/ wBoard;
-      s.context.fillStyle = intColors[blocks[i]];
-      s.context.fillRect(x * blockSize, y * blockSize, blockSize, blockSize);
-      s.context.strokeRect(x * blockSize, y * blockSize, blockSize, blockSize);
+      scr.context.fillStyle = intColors[blocks[i]];
+      scr.drawBlock(intColors[blocks[i]], x, y);
     }
-    s.context.restore();
+    cur.draw(xPosition, yPosition); 
+    next.draw(wBoard, 0);
   }
 }

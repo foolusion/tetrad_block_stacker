@@ -8,42 +8,28 @@ part 'input.dart';
 part 'screen.dart';
 part 'tetrad.dart';
 
-Screen scr;
 Game g;
+html.DivElement score;
 void main() {
-  g = new Game(16, 24);
-  scr = new Screen('#screen', 16, 24);
+  g = new Game(16, 24, '#screen');
+  score = new html.DivElement();
+  html.querySelector('body').append(score);
   gameLoop();
 }
 
 int start = new DateTime.now().millisecondsSinceEpoch;
-var tetrad = new Tetrad(i, wI, hI, 'red');
+var tetrad = new Tetrad(i, wI, hI, 'red', g);
 
 gameLoop([_]) {
   int i = html.window.requestAnimationFrame(gameLoop);
   int time = new DateTime.now().millisecondsSinceEpoch;
   g.update(time);
-  scr.context.clearRect(0, 0, scr.canvas.width, scr.canvas.height);
-  scr.context.strokeStyle = 'black';
-  scr.context.strokeRect(.5, .5, blockSize*g.wBoard-1, blockSize*g.hBoard-1);
-  scr.context.save();
-  scr.context.translate(blockSize*(g.xPosition)+-.5, blockSize*(g.yPosition)+-.5);
-  g.cur.draw(scr.context, g.xPosition, g.yPosition); 
-  scr.context.restore();
-  
-  scr.context.save();
-  scr.context.translate(blockSize*(g.wBoard)+-.5, -.5);
-  scr.context.strokeRect(0, 0, blockSize*4, blockSize*4);
-  scr.context.font = '12pt Roboto';
-  var t = scr.context.measureText('Next');
-  scr.context.fillText('Next', 2, 2+blockSize*4+t.actualBoundingBoxAscent);
-  g.next.draw(scr.context, g.wBoard, 0);
-  scr.context.restore();
-  g.draw(scr);
+  g.draw();
   if (g.gameOver) {
     html.window.cancelAnimationFrame(i);
     return;
   }
+  score.text = '${g.score}';
 }
 
 
