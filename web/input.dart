@@ -6,9 +6,9 @@ class Input {
   Map<String, bool> actions = new Map<String, bool>();
   bool rotateReleased = true;
   bool pauseReleased = true;
-  int leftTime = horizontalSpeed;
-  int rightTime = horizontalSpeed;
-  static const int horizontalSpeed = 500;
+  double leftTime = horizontalSpeed;
+  double rightTime = horizontalSpeed;
+  static const double horizontalSpeed = 1000 / 10;
   async.StreamSubscription keyDownSub;
   async.StreamSubscription keyUpSub;
 
@@ -32,14 +32,14 @@ class Input {
     keyUpSub.cancel();
   }
 
-  Function getAction(dt) {
+  Function getAction(double dt) {
     if (actions['left'] == true && leftTime > dt) {
       leftTime -= dt;
     } else if (actions['left'] == true) {
       leftTime += horizontalSpeed;
       return Game.moveTetradLeft;
     } else if (actions['left'] == false) {
-      leftTime = 0;
+      leftTime = 0.0;
     }
 
     if (actions['right'] == true && rightTime > dt) {
@@ -48,7 +48,7 @@ class Input {
       rightTime += horizontalSpeed;
       return Game.moveTetradRight;
     } else if (actions['right'] == false) {
-      rightTime = 0;
+      rightTime = 0.0;
     }
 
     if (actions['rotate'] == true) return rotate();

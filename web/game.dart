@@ -16,21 +16,23 @@ Map<String, int> colorInts = {
 
 class Game {
   int score = 0;
-  int startTime;
+  double startTime;
   int wBoard, hBoard;
   int xPosition, yPosition; // position of the current falling block.
   List<int> blocks; // static blocks on the bottom of the screen.
   Tetrad cur;
   List<Tetrad> next;
-  int dropTime = 1000 ~/ 5;
+  double dropTime = timePerDrop;
   Input input;
   bool gameOver = false;
   final int loseLine = 3;
   Screen scr;
+  Clock clock;
   bool paused = false;
+  static const double timePerDrop = 1000 / 5;
 
   Game(this.wBoard, this.hBoard, String screenQuery) {
-    startTime = new DateTime.now().millisecondsSinceEpoch;
+    startTime = html.window.performance.now();
     xPosition = wBoard ~/ 2;
     yPosition = 0;
     blocks = new List<int>.filled(wBoard * hBoard, 0);
@@ -38,6 +40,7 @@ class Game {
     cur = next.removeLast();
     input = new Input(this);
     scr = new Screen(screenQuery, wBoard, hBoard);
+    clock = new Clock(startTime.toDouble());
   }
   
   shutdown() {
@@ -47,11 +50,11 @@ class Game {
     html.querySelector('body').append(img);
   }
 
-  update(int time) {
+  update(double time) {
     if (cur == null) {
       swapToNextTetrad();
     }
-    int dt = time - startTime;
+    double dt = time - startTime;
     Function action = input.getAction(dt);
     action(this);
     if (paused) {
@@ -61,6 +64,9 @@ class Game {
     if (dt > dropTime) {
       moveTetradDown(this);
       startTime = time;
+      dropTime = timePerDrop;
+    } else {
+      dropTime -= dt;
     }
     if (gameOver) {
       print('You Lose');
@@ -68,9 +74,9 @@ class Game {
     checkForFullLines();
   }
   
-  gameLoop([_]) {
+  gameLoop(num time) {
     int i = html.window.requestAnimationFrame(gameLoop);
-    int time = new DateTime.now().millisecondsSinceEpoch;
+    g.clock.update(time-g.startTime);
     g.update(time);
     g.draw();
     if (g.paused){
@@ -81,6 +87,7 @@ class Game {
       g.shutdown();
       return;
     }
+    g.startTime = time;
   }
 
   void checkForFullLines() {
