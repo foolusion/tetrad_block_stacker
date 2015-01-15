@@ -62,7 +62,6 @@ class Game {
     }
     if (dt > dropTime) {
       moveTetradDown(this);
-      dropTime = timePerDrop;
     } else {
       dropTime -= dt;
     }
@@ -129,6 +128,7 @@ class Game {
   }
 
   static void moveTetradDown(Game g) {
+    g.dropTime = timePerDrop;
     final Tetrad t = new Tetrad.copy(g.cur);
     if (g.yPosition + t.height == g.hBoard || g.intersects(t, g.xPosition, g.yPosition + 1, g.blocks)) {
       g.mergeBlocks();
@@ -209,6 +209,7 @@ class Game {
       int yTetrad = i ~/ t.width;
       blocks[xPosition + xTetrad + (yPosition + yTetrad) * wBoard] = colorInts[t.color];
     }
+    dropTime = 1000.0;
   }
 
   draw() {
