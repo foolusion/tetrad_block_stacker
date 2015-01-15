@@ -20,7 +20,7 @@ class Clock {
   
   void update(double dtRealSeconds) {
     if (!isPaused) {
-      int dtScaledCycles = secondsToCycles(dtRealSeconds * timeScale);
+      int dtScaledCycles = secondsToCycles(dtRealSeconds * timeScale).toInt();
       timeCycles += dtScaledCycles;
     }
   }

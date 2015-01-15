@@ -30,6 +30,7 @@ class Game {
   Clock clock;
   bool paused = false;
   static const double timePerDrop = 1000 / 5;
+  static const double maxDT = 1000/30;
 
   Game(this.wBoard, this.hBoard, String screenQuery) {
     startTime = html.window.performance.now();
@@ -50,20 +51,17 @@ class Game {
     html.querySelector('body').append(img);
   }
 
-  update(double time) {
+  update(double dt) {
     if (cur == null) {
       swapToNextTetrad();
     }
-    double dt = time - startTime;
     Function action = input.getAction(dt);
     action(this);
     if (paused) {
-      startTime = time;
       return;
     }
     if (dt > dropTime) {
       moveTetradDown(this);
-      startTime = time;
       dropTime = timePerDrop;
     } else {
       dropTime -= dt;
@@ -76,8 +74,12 @@ class Game {
   
   gameLoop(num time) {
     int i = html.window.requestAnimationFrame(gameLoop);
-    g.clock.update(time-g.startTime);
-    g.update(time);
+    double dt = time-g.startTime;
+    if (dt > maxDT) {
+      dt = maxDT;
+    }
+    g.clock.update(dt);
+    g.update(dt);
     g.draw();
     if (g.paused){
       g.scr.drawPausedScreen();
