@@ -74,22 +74,22 @@ class Game {
   
   gameLoop(num time) {
     int i = html.window.requestAnimationFrame(gameLoop);
-    double dt = time-g.startTime;
+    double dt = time-startTime;
     if (dt > maxDT) {
       dt = maxDT;
     }
-    g.clock.update(dt);
-    g.update(dt);
-    g.draw();
-    if (g.paused){
-      g.scr.drawPausedScreen();
+    clock.update(dt);
+    update(dt);
+    draw();
+    if (paused){
+      scr.drawPausedScreen();
     }
-    if (g.gameOver) {
+    if (gameOver) {
       html.window.cancelAnimationFrame(i);
-      g.shutdown();
+      shutdown();
       return;
     }
-    g.startTime = time;
+    startTime = time;
   }
 
   void checkForFullLines() {
