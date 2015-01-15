@@ -15,20 +15,24 @@ Map<String, int> colorInts = {
 };
 
 class Game {
-  int score = 0;
   double startTime;
   int wBoard, hBoard;
   int xPosition, yPosition; // position of the current falling block.
   List<int> blocks; // static blocks on the bottom of the screen.
+  
   Tetrad cur;
   List<Tetrad> next;
-  double dropTime = timePerDrop;
+  
   Input input;
-  bool gameOver = false;
-  final int loseLine = 3;
   Screen scr;
   Clock clock;
+  
+  int score = 0;
+  bool gameOver = false;
+  final int loseLine = 3;
   bool paused = false;
+  
+  double dropTime = timePerDrop;
   static const double timePerDrop = 1000 / 5;
   static const double maxDT = 1000/30;
 
@@ -74,12 +78,12 @@ class Game {
   
   gameLoop(num time) {
     int i = html.window.requestAnimationFrame(gameLoop);
-    double dt = time-startTime;
-    if (dt > maxDT) {
-      dt = maxDT;
+    double frameDT = time-startTime;
+    if (frameDT > maxDT) {
+      frameDT = maxDT;
     }
-    clock.update(dt);
-    update(dt);
+    clock.update(frameDT);
+    update(clock.dtMs);
     draw();
     if (paused){
       scr.drawPausedScreen();

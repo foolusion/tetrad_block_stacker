@@ -71,7 +71,9 @@ class Input {
   Function pause() {
     if (pauseReleased) {
       pauseReleased = false;
-      return (Game g) { g.paused = !g.paused; };
+      return (Game g) { 
+        g.paused = !g.paused;
+        g.clock.isPaused = !g.clock.isPaused;};
     }
     return ([_]) {};
   }
