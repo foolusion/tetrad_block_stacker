@@ -164,7 +164,7 @@ class Game {
       if (g.intersects(t, g.xPosition - 1, g.yPosition, g.blocks)) {
         return;
       }
-      g.xPosition -= 1;
+      g.xPosition = g.wBoard-t.width;
     }
     g.cur.rotate();
   }
