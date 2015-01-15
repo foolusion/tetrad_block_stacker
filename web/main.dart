@@ -4,6 +4,7 @@ import 'dart:async' as async;
 import 'dart:html' as html;
 import 'dart:math' as math;
 
+part 'clock.dart';
 part 'game.dart';
 part 'input.dart';
 part 'screen.dart';
