@@ -62,26 +62,6 @@ class Tetrad {
     return tl;
   }
 
-  static Tetrad makeRandomTetrad(Game g) {
-    switch (r.nextInt(7)) {
-      case 0:
-        return new Tetrad(l, wL, hL, 'red', g);
-      case 1:
-        return new Tetrad(j, wJ, hJ, 'orange', g);
-      case 2:
-        return new Tetrad(t, wT, hT, 'yellow', g);
-      case 3:
-        return new Tetrad(z, wZ, hZ, 'green', g);
-      case 4:
-        return new Tetrad(s, wS, hS, 'blue', g);
-      case 5:
-        return new Tetrad(o, wO, hO, 'indigo', g);
-      case 6:
-        return new Tetrad(i, wI, hI, 'violet', g);
-    }
-    return new Tetrad(l, wL, hL, 'red', g);
-  }
-
   rotate() {
     currentConfig = (currentConfig + 1) % config.length;
     var temp = width;
