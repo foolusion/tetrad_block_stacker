@@ -49,6 +49,7 @@ class Game {
     var screenShot = scr.shutdown();
     html.ImageElement img = new html.ImageElement(src: screenShot);
     html.querySelector('body').append(img);
+    html.querySelector('#game').className = 'hidden';
   }
 
   update(double dt) {
