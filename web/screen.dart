@@ -52,4 +52,13 @@ class Screen {
     context.fillText('Next', 0, blockSize*5);
     context.restore();
   }
+  
+  drawPausedScreen() {
+    context.fillStyle = 'rgba(255,255,255, .3)';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = 'rgba(255,255,255,1.0)';
+    context.font = '24pt sans-serif';
+    var t = context.measureText('PAUSED');
+    context.fillText('PAUSED', (canvas.width - t.actualBoundingBoxRight) ~/ 2, (canvas.height - t.actualBoundingBoxAscent) ~/ 2 + t.actualBoundingBoxAscent);
+  }
 }

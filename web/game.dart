@@ -27,6 +27,7 @@ class Game {
   bool gameOver = false;
   final int loseLine = 3;
   Screen scr;
+  bool paused = false;
 
   Game(this.wBoard, this.hBoard, String screenQuery) {
     startTime = new DateTime.now().millisecondsSinceEpoch;
@@ -53,6 +54,10 @@ class Game {
     int dt = time - startTime;
     Function action = input.getAction(dt);
     action(this);
+    if (paused) {
+      startTime = time;
+      return;
+    }
     if (dt > dropTime) {
       moveTetradDown(this);
       startTime = time;
@@ -68,6 +73,9 @@ class Game {
     int time = new DateTime.now().millisecondsSinceEpoch;
     g.update(time);
     g.draw();
+    if (g.paused){
+      g.scr.drawPausedScreen();
+    }
     if (g.gameOver) {
       html.window.cancelAnimationFrame(i);
       g.shutdown();
