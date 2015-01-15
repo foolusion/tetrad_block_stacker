@@ -10,7 +10,7 @@ class Screen {
     canvas.height = height * blockSize;
     context = canvas.context2D;
   }
-  
+
   shutdown() {
     var s = canvas.toDataUrl();
     context.fillStyle = 'black';
@@ -52,7 +52,7 @@ class Screen {
 //    context.fillText('Next', 0, blockSize*5);
 //    context.restore();
   }
-  
+
   drawPausedScreen() {
     context.fillStyle = 'rgba(255,255,255, .3)';
     context.fillRect(0, 0, canvas.width, canvas.height);

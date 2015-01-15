@@ -20,6 +20,5 @@ void main() {
     game.className = 'active';
     g = new Game(16, 24, '#screen');
     g.gameLoop(html.window.performance.now());
-    });
+  });
 }
-

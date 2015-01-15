@@ -41,7 +41,7 @@ class Tetrad {
     color = t.color;
     g = t.g;
   }
-  
+
   static List<Tetrad> newTetradList(Game g) {
     var tl = [];
     tl.add(new Tetrad(l, wL, hL, 'red', g));
