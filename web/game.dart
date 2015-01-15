@@ -19,22 +19,27 @@ class Game {
   int wBoard, hBoard;
   int xPosition, yPosition; // position of the current falling block.
   List<int> blocks; // static blocks on the bottom of the screen.
-  
+
   Tetrad cur;
   List<Tetrad> next;
-  
+
   Input input;
   Screen scr;
   Clock clock;
-  
+
+  String state = 'running';
   int score = 0;
   bool gameOver = false;
   final int loseLine = 3;
   bool paused = false;
-  
+
   double dropTime = timePerDrop;
   static const double timePerDrop = 1000 / 5;
-  static const double maxDT = 1000/30;
+  static const double maxDT = 1000 / 30;
+  var timedLeftAction;
+  var timedRightAction;
+  var buttonPressRotate;
+  var buttonPressPause;
 
   Game(this.wBoard, this.hBoard, String screenQuery) {
     startTime = html.window.performance.now();
@@ -46,8 +51,12 @@ class Game {
     input = new Input(this);
     scr = new Screen(screenQuery, wBoard, hBoard);
     clock = new Clock(startTime.toDouble());
+    timedLeftAction = Input.makeTimedAction(1000 / 10, moveTetradLeft, this);
+    timedRightAction = Input.makeTimedAction(1000 / 10, moveTetradRight, this);
+    buttonPressRotate = Input.makeButtonPressAction(rotateTetrad, this);
+    buttonPressPause = Input.makeButtonPressAction(pause, this);
   }
-  
+
   shutdown() {
     input.shutdown();
     var screenShot = scr.shutdown();
@@ -56,15 +65,7 @@ class Game {
     html.querySelector('#game').className = 'hidden';
   }
 
-  update(double dt) {
-    if (cur == null) {
-      swapToNextTetrad();
-    }
-    Function action = input.getAction(dt);
-    action(this);
-    if (paused) {
-      return;
-    }
+  updateGame(double dt) {
     if (dt > dropTime) {
       moveTetradDown(this);
     } else {
@@ -75,17 +76,50 @@ class Game {
     }
     checkForFullLines();
   }
-  
+
+  updatePaused(double dt) {
+
+  }
+
+  void handleGameInput(double dt) {
+    timedLeftAction(dt, input.actions['left']);
+    timedRightAction(dt, input.actions['right']);
+    buttonPressRotate(input.actions['up']);
+    buttonPressPause(input.actions['pause']);
+    if (input.actions['down'] == true) Game.moveTetradDown(this);
+  }
+
+  void handlePausedInput(double dt) {
+    buttonPressPause(input.actions['pause']);
+  }
+
   gameLoop(num time) {
     int i = html.window.requestAnimationFrame(gameLoop);
-    double frameDT = time-startTime;
+    double frameDT = time - startTime;
+    // handle pauses
     if (frameDT > maxDT) {
       frameDT = maxDT;
     }
     clock.update(frameDT);
-    update(clock.dtMs);
+    var dt = clock.dtMs;
+
+    switch (state) {
+      case 'running':
+        handleGameInput(dt);
+        updateGame(dt);
+        break;
+      case 'paused':
+        handlePausedInput(dt);
+        updatePaused(dt);
+        break;
+      case 'settings':
+        handleSettingsInput(dt);
+        updateSettings(dt);
+        break;
+    }
+
     draw();
-    if (paused){
+    if (state == 'paused') {
       scr.drawPausedScreen();
     }
     if (gameOver) {
@@ -93,7 +127,7 @@ class Game {
       shutdown();
       return;
     }
-    
+
     startTime = time;
   }
 
@@ -125,12 +159,12 @@ class Game {
   }
 
   void swapToNextTetrad() {
-      cur = next.removeLast();
-      xPosition = wBoard ~/ 2;
-      yPosition = 0;
-      if (next.length == 0) {
-        next = Tetrad.newTetradList(this);
-      }
+    cur = next.removeLast();
+    xPosition = wBoard ~/ 2;
+    yPosition = 0;
+    if (next.length == 0) {
+      next = Tetrad.newTetradList(this);
+    }
   }
 
   static void moveTetradDown(Game g) {
@@ -172,9 +206,19 @@ class Game {
       if (g.intersects(t, g.xPosition - 1, g.yPosition, g.blocks)) {
         return;
       }
-      g.xPosition = g.wBoard-t.width;
+      g.xPosition = g.wBoard - t.width;
     }
     g.cur.rotate();
+  }
+
+  static void pause(Game g) {
+    if (g.state == 'running') {
+      g.state = 'paused';
+      g.clock.isPaused = true;
+      return;
+    }
+    g.state = 'running';
+    g.clock.isPaused = false;
   }
 
   intersects(Tetrad t, int x, int y, List<int> blocks) {

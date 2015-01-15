@@ -14,79 +14,60 @@ class Input {
 
   Input(this.g) {
     keys[37] = 'left';
-    keys[38] = 'rotate';
+    keys[38] = 'up';
     keys[39] = 'right';
     keys[40] = 'down';
     keys[32] = 'pause';
     actions['left'] = false;
     actions['right'] = false;
-    actions['rotate'] = false;
+    actions['up'] = false;
     actions['down'] = false;
     actions['pause'] = false;
     keyDownSub = html.window.onKeyDown.listen(keydown);
     keyUpSub = html.window.onKeyUp.listen(keyup);
   }
-  
+
   shutdown() {
     keyDownSub.cancel();
     keyUpSub.cancel();
   }
 
-  Function getAction(double dt) {
-    if (actions['left'] == true && leftTime > dt) {
-      leftTime -= dt;
-    } else if (actions['left'] == true) {
-      leftTime += horizontalSpeed;
-      return Game.moveTetradLeft;
-    } else if (actions['left'] == false) {
-      leftTime = 0.0;
-    }
-
-    if (actions['right'] == true && rightTime > dt) {
-      rightTime -= dt;
-    } else if (actions['right'] == true) {
-      rightTime += horizontalSpeed;
-      return Game.moveTetradRight;
-    } else if (actions['right'] == false) {
-      rightTime = 0.0;
-    }
-
-    if (actions['rotate'] == true) return rotate();
-    if (actions['rotate'] == false) rotateReleased = true;
-    if (actions['down'] == true) return Game.moveTetradDown;
-    
-    if (actions['pause'] == true) return pause();
-    if (actions['pause'] == false) pauseReleased = true;
-    return ([_]) {};
+  static Function makeTimedAction(double time, void action(Game g), Game g) {
+    var a = time;
+    return (double dt, bool pressed) {
+      if (pressed && a > dt) {
+        a -= dt;
+      } else if (pressed) {
+        action(g);
+        a += time;
+      } else if (!pressed) {
+        a = 0.0;
+      }
+    };
   }
 
-  Function rotate() {
-    if (rotateReleased) {
-      rotateReleased = false;
-      return Game.rotateTetrad;
-    }
-    return ([_]) {};
+  static Function makeButtonPressAction(void action(Game g), Game g) {
+    bool buttonPressed = false;
+    return (bool pressed) {
+      if (!buttonPressed && pressed) {
+        buttonPressed = true;
+        action(g);
+        return;
+      }
+      if (!pressed) {
+        buttonPressed = false;
+      }
+    };
   }
-  
-  Function pause() {
-    if (pauseReleased) {
-      pauseReleased = false;
-      return (Game g) { 
-        g.paused = !g.paused;
-        g.clock.isPaused = !g.clock.isPaused;};
-    }
-    return ([_]) {};
-  }
-    
 
   keydown(html.KeyboardEvent e) {
     actions[keys[e.keyCode]] = true;
-    print(e.keyCode);
+    print(e.which);
   }
 
   keyup(html.KeyboardEvent e) {
     actions[keys[e.keyCode]] = false;
-    print(e.keyCode);
+    print(e.which);
   }
 
 }
