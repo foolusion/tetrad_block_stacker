@@ -6,7 +6,7 @@ class Screen {
 
   Screen(String s, int width, int height) {
     canvas = html.querySelector(s);
-    canvas.width = (width + 4) * blockSize;
+    canvas.width = width * blockSize;
     canvas.height = height * blockSize;
     context = canvas.context2D;
   }
@@ -44,13 +44,13 @@ class Screen {
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.strokeStyle = 'white';
     context.strokeRect(.5, .5, blockSize * w - 1, blockSize * h - 1);
-    context.save();
-    context.translate(blockSize * (w) + -.5, -.5);
-    context.strokeRect(0, 0, blockSize * 4, blockSize * 4);
-    context.fillStyle = 'white';
-    context.font = '12pt sans-serif';
-    context.fillText('Next', 0, blockSize*5);
-    context.restore();
+//    context.save();
+//    context.translate(blockSize * (w) + -.5, -.5);
+//    context.strokeRect(0, 0, blockSize * 4, blockSize * 4);
+//    context.fillStyle = 'white';
+//    context.font = '12pt sans-serif';
+//    context.fillText('Next', 0, blockSize*5);
+//    context.restore();
   }
   
   drawPausedScreen() {

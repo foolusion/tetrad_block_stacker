@@ -27,7 +27,7 @@ class Tetrad {
   int width, height;
   int currentConfig = 0;
   String color;
-  static math.Random r = new math.Random();
+  static math.Random r = new math.Random(0);
   Game g;
 
   Tetrad(this.config, this.width, this.height, this.color, this.g) {

@@ -89,6 +89,7 @@ class Game {
       shutdown();
       return;
     }
+    
     startTime = time;
   }
 
