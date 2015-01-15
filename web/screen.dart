@@ -6,7 +6,7 @@ class Screen {
 
   Screen(String s, int width, int height) {
     canvas = html.querySelector(s);
-    canvas.width = width * blockSize;
+    canvas.width = (width + 6) * blockSize;
     canvas.height = height * blockSize;
     context = canvas.context2D;
   }
@@ -44,13 +44,27 @@ class Screen {
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.strokeStyle = 'white';
     context.strokeRect(.5, .5, blockSize * w - 1, blockSize * h - 1);
-//    context.save();
-//    context.translate(blockSize * (w) + -.5, -.5);
-//    context.strokeRect(0, 0, blockSize * 4, blockSize * 4);
-//    context.fillStyle = 'white';
-//    context.font = '12pt sans-serif';
-//    context.fillText('Next', 0, blockSize*5);
-//    context.restore();
+  }
+
+  drawNext(int x, int y) {
+    context.save();
+    context.translate(blockSize * x - .5, y - .5);
+    context.strokeRect(0, blockSize, blockSize * 4, blockSize * 4);
+    context.fillStyle = 'white';
+    context.font = '${blockSize}px sans-serif';
+    context.fillText('Next', 0, blockSize - 2);
+    context.restore();
+  }
+
+  drawScore(int x, int y) {
+    context.save();
+    context.translate(blockSize * x - .5, blockSize * y - .5);
+    context.font = '${blockSize}px sans-serif';
+    context.fillStyle = 'white';
+    context.fillText('Score', 0, blockSize - 2);
+    context.font = '${2*blockSize}px sans-serif';
+    context.fillText('${g.score}', 0, blockSize * 3 - 2);
+    context.restore();
   }
 
   drawPausedScreen() {

@@ -265,6 +265,8 @@ class Game {
   draw() {
     scr.drawBackground(wBoard, hBoard);
     scr.drawLoseLine(loseLine, wBoard);
+    scr.drawNext(wBoard, 0);
+    scr.drawScore(wBoard, 5);
     for (int i = 0; i < blocks.length; i++) {
       if (blocks[i] == 0) {
         continue;
@@ -275,6 +277,6 @@ class Game {
       scr.drawBlock(intColors[blocks[i]], x, y);
     }
     cur.draw(xPosition, yPosition);
-    next.last.draw(wBoard, 0);
+    next.last.draw(wBoard, 1);
   }
 }
