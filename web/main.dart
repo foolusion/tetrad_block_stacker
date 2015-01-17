@@ -13,8 +13,6 @@ part 'tetrad.dart';
 Game g;
 html.DivElement score;
 void main() {
-  var game = html.querySelector('#game');
-  game.className = 'active';
   g = new Game(16, 24, '#screen');
   g.gameLoop(html.window.performance.now());
 }

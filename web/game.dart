@@ -59,10 +59,7 @@ class Game {
 
   shutdown() {
     input.shutdown();
-    var screenShot = scr.shutdown();
-    html.ImageElement img = new html.ImageElement(src: screenShot);
-    html.querySelector('body').append(img);
-    html.querySelector('#game').className = 'hidden';
+    scr.shutdown(score);
   }
 
   updateGame(double dt) {

@@ -11,11 +11,15 @@ class Screen {
     context = canvas.context2D;
   }
 
-  shutdown() {
-    var s = canvas.toDataUrl();
-    context.fillStyle = 'black';
+  shutdown(int score) {
+    context.fillStyle = 'rgba(255, 255, 255, 0.25)';
     context.fillRect(0, 0, canvas.width, canvas.height);
-    return s;
+    context.fillStyle = 'white';
+    context.font = '32px sans-serif';
+    var t = context.measureText('GAME OVER');
+    context.fillText('GAME OVER', (canvas.width - t.width) ~/ 2, canvas.height  ~/ 2);
+    t = context.measureText('${score}');
+    context.fillText('${score}', (canvas.width - t.width) ~/ 2, canvas.height ~/ 2 + 32);
   }
 
   drawBlock(String color, int x, int y) {
