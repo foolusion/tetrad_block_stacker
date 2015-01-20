@@ -17,7 +17,7 @@ class Screen {
     context.fillStyle = 'white';
     context.font = '32px sans-serif';
     var t = context.measureText('GAME OVER');
-    context.fillText('GAME OVER', (canvas.width - t.width) ~/ 2, canvas.height  ~/ 2);
+    context.fillText('GAME OVER', (canvas.width - t.width) ~/ 2, canvas.height ~/ 2);
     t = context.measureText('${score}');
     context.fillText('${score}', (canvas.width - t.width) ~/ 2, canvas.height ~/ 2 + 32);
   }
@@ -60,14 +60,14 @@ class Screen {
     context.restore();
   }
 
-  drawScore(int x, int y) {
+  drawScore(int score, int x, int y) {
     context.save();
     context.translate(blockSize * x - .5, blockSize * y - .5);
     context.font = '${blockSize}px sans-serif';
     context.fillStyle = 'white';
     context.fillText('Score', 0, blockSize - 2);
     context.font = '${2*blockSize}px sans-serif';
-    context.fillText('${g.score}', 0, blockSize * 3 - 2);
+    context.fillText('${score}', 0, blockSize * 3 - 2);
     context.restore();
   }
 

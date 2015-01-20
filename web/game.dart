@@ -24,6 +24,8 @@ class Game {
   List<Tetrad> next;
 
   Input input;
+  String screenQuery;
+  int rafid;
   Screen scr;
   Clock clock;
 
@@ -38,10 +40,11 @@ class Game {
   static const double maxDT = 1000 / 30;
   var timedLeftAction;
   var timedRightAction;
-  var buttonPressRotate;
-  var buttonPressPause;
+  var keyPressRotate;
+  var keyPressPause;
+  var keyPressNewGame;
 
-  Game(this.wBoard, this.hBoard, String screenQuery) {
+  Game(this.wBoard, this.hBoard, this.screenQuery) {
     startTime = html.window.performance.now();
     xPosition = wBoard ~/ 2;
     yPosition = 0;
@@ -53,12 +56,12 @@ class Game {
     clock = new Clock(startTime.toDouble());
     timedLeftAction = Input.makeTimedAction(1000 / 10, moveTetradLeft, this);
     timedRightAction = Input.makeTimedAction(1000 / 10, moveTetradRight, this);
-    buttonPressRotate = Input.makeButtonPressAction(rotateTetrad, this);
-    buttonPressPause = Input.makeButtonPressAction(pause, this);
+    keyPressRotate = Input.makeKeyPressAction(rotateTetrad, this);
+    keyPressPause = Input.makeKeyPressAction(pause, this);
+    keyPressNewGame = Input.makeKeyPressAction(newGame, this);
   }
 
   shutdown() {
-    input.shutdown();
     scr.shutdown(score);
   }
 
@@ -78,20 +81,28 @@ class Game {
 
   }
 
+  updateGameOver(double dt) {
+
+  }
+
   void handleGameInput(double dt) {
     timedLeftAction(dt, input.actions['left']);
     timedRightAction(dt, input.actions['right']);
-    buttonPressRotate(input.actions['up']);
-    buttonPressPause(input.actions['pause']);
+    keyPressRotate(input.actions['up']);
+    keyPressPause(input.actions['pause']);
     if (input.actions['down'] == true) Game.moveTetradDown(this);
   }
 
   void handlePausedInput(double dt) {
-    buttonPressPause(input.actions['pause']);
+    keyPressPause(input.actions['pause']);
+  }
+
+  void handleGameOverInput(double dt) {
+    keyPressNewGame(input.actions['pause']);
   }
 
   gameLoop(num time) {
-    int i = html.window.requestAnimationFrame(gameLoop);
+    rafid = html.window.requestAnimationFrame(gameLoop);
     double frameDT = time - startTime;
     // handle pauses
     if (frameDT > maxDT) {
@@ -109,6 +120,10 @@ class Game {
         handlePausedInput(dt);
         updatePaused(dt);
         break;
+      case 'gameover':
+        handleGameOverInput(dt);
+        updateGameOver(dt);
+        break;
       case 'settings':
         handleSettingsInput(dt);
         updateSettings(dt);
@@ -118,9 +133,7 @@ class Game {
     draw();
     if (state == 'paused') {
       scr.drawPausedScreen();
-    }
-    if (gameOver) {
-      html.window.cancelAnimationFrame(i);
+    } else if (state == 'gameover') {
       shutdown();
       return;
     }
@@ -169,7 +182,7 @@ class Game {
     final Tetrad t = new Tetrad.copy(g.cur);
     if (g.yPosition + t.height == g.hBoard || g.intersects(t, g.xPosition, g.yPosition + 1, g.blocks)) {
       g.mergeBlocks();
-      if (g.gameOver) {
+      if (g.state == 'gameover') {
         return;
       }
       g.swapToNextTetrad();
@@ -218,6 +231,12 @@ class Game {
     g.clock.isPaused = false;
   }
 
+  static void newGame(Game game) {
+    html.window.cancelAnimationFrame(game.rafid);
+    g = new Game(game.wBoard, game.hBoard, game.screenQuery);
+    g.gameLoop(html.window.performance.now());
+  }
+
   intersects(Tetrad t, int x, int y, List<int> blocks) {
     for (int i = 0; i < blocks.length; i++) {
       if (blocks[i] == 0) {
@@ -242,12 +261,7 @@ class Game {
   }
 
   void mergeBlocks() {
-    if (yPosition <= loseLine) {
-      gameOver = true;
-      return;
-    }
-    score++;
-    final Tetrad t = new Tetrad.copy(g.cur);
+    final Tetrad t = new Tetrad.copy(cur);
     for (int i = 0; i < t.config[t.currentConfig].length; i++) {
       if (t.config[t.currentConfig][i] == '0') {
         continue;
@@ -257,13 +271,18 @@ class Game {
       blocks[xPosition + xTetrad + (yPosition + yTetrad) * wBoard] = colorInts[t.color];
     }
     dropTime = 1000.0;
+    if (yPosition <= loseLine) {
+      state = 'gameover';
+      return;
+    }
+    score++;
   }
 
   draw() {
     scr.drawBackground(wBoard, hBoard);
     scr.drawLoseLine(loseLine, wBoard);
     scr.drawNext(wBoard, 0);
-    scr.drawScore(wBoard, 5);
+    scr.drawScore(score, wBoard, 5);
     for (int i = 0; i < blocks.length; i++) {
       if (blocks[i] == 0) {
         continue;

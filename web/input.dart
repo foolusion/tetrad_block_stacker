@@ -27,11 +27,6 @@ class Input {
     keyUpSub = html.window.onKeyUp.listen(keyup);
   }
 
-  shutdown() {
-    keyDownSub.cancel();
-    keyUpSub.cancel();
-  }
-
   static Function makeTimedAction(double time, void action(Game g), Game g) {
     var a = time;
     return (double dt, bool pressed) {
@@ -46,7 +41,7 @@ class Input {
     };
   }
 
-  static Function makeButtonPressAction(void action(Game g), Game g) {
+  static Function makeKeyPressAction(void action(Game g), Game g) {
     bool buttonPressed = false;
     return (bool pressed) {
       if (!buttonPressed && pressed) {
